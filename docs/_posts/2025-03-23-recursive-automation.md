@@ -268,11 +268,10 @@ I realize now after the fact as I write that I could have done two passes here..
 
 I explained my dilemma to Claude and uploaded 20 of the un-annotated images.  To my surprise, Claude had no trouble perfectly extracting the correct text for the tiny images I uploaded!  Hooray!
 
-![Claude OCR](/assets/images/5.png)
+<img src="/assets/images/5.png" alt="Claude OCR" style="border: 2px solid #0066cc; border-radius: 4px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" />
 
 However, Claude wouldn't let me upload all 1408 images I had... 
-
-![Claude response](/assets/images/6.png)
+<img src="/assets/images/6.png" alt="Claude response" style="border: 2px solid #0066cc; border-radius: 4px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" />
 
 But I found a way to trick Claude! Although it wouldn't let me upload 1408 individual images, Claude would evaluate pages and pages of PDFs with images embedded in them.
 
