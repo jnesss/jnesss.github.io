@@ -271,6 +271,7 @@ I explained my dilemma to Claude and uploaded 20 of the un-annotated images.  To
 <img src="/assets/images/5.png" alt="Claude OCR" style="border: 2px solid #0066cc; border-radius: 4px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" />
 
 However, Claude wouldn't let me upload all 1408 images I had... 
+
 <img src="/assets/images/6.png" alt="Claude response" style="border: 2px solid #0066cc; border-radius: 4px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" />
 
 But I found a way to trick Claude! Although it wouldn't let me upload 1408 individual images, Claude would evaluate pages and pages of PDFs with images embedded in them.
