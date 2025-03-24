@@ -4,8 +4,6 @@ title: "Recursive Automation: Using AI to Train Better AI for Game Bots"
 date: 2025-03-23
 author: Jonathan Ness
 ---
-
-# Recursive Automation: Using AI to Train Better AI for Game Bots
  
 ## The Bootstrap Paradox of Game Automation
 
