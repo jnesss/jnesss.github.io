@@ -9,7 +9,7 @@ author: Jonathan Ness
 
 I discovered Roboflow a couple weeks ago and was so impressed by how it transformed computer vision from a laborious process into something accessible, powerful, and fun. I worked with it for a few days and built a fun prototype that automates the mobile game Rise of Kingdoms using Roboflow's object detection capabilities.
 
-The initial automation worked perfectly for detecting game UI elements, but I quickly hit a fascinating challenge: to make the automation truly useful, I needed to read tiny text displays showing countdown timers in the game. This created a perfect bootstrap paradox - I needed automation to collect and label thousands of timer screenshots, but I needed those labeled screenshots to build the automation in the first place.
+The initial automation worked perfectly for detecting game UI elements, but I quickly encountered a fascinating challenge: To make the automation truly useful, I needed to read tiny text displays showing countdown timers in the game. This created a perfect bootstrap paradox: I needed automation to collect and label thousands of timer screenshots, but I needed those labeled screenshots to build the automation in the first place.
 
 This post details my journey solving this recursive problem through a combination of Roboflow's computer vision, PyTorch CNNs, and - in a meta twist - using Claude AI to help annotate training data. It's a story about AI helping to build better AI, and the surprising solutions I found along the way.
 
@@ -31,15 +31,15 @@ The automation system combines several technologies:
 - **PyTorch** for the custom OCR model
 - **Claude** for AI-assisted data annotation
 
-I used Bluestacks ADB to take one screenshot of the game every second, sent the screenshot to Roboflow for inference, and then clicked the detected regions to automate the  tedious ROK tutorial. The complete Python code for this project is available at [github.com/jnesss/roborok](https://github.com/jnesss/roborok).
+I used Bluestacks ADB to take a screenshot of the game every second, sent the screenshot to Roboflow for inference, and then clicked the detected regions to automate the  tedious ROK tutorial. The complete Python code for this project is available at [github.com/jnesss/roborok](https://github.com/jnesss/roborok).
 
 ## OCR is harder than I thought it would be
 
-To progress beyond basic automation, I needed my system to read text on the screen. My game screenshots were 640x480 which meant much of the text was only 7px tall.  It was still very readable for a human so I thought it would be no problem for the computer.  The builer and research queue times were the most important game elemenets to OCR to progress in the game beyond the first few city hall levels.  Here's what those look like:
+To progress beyond basic automation, I needed my system to read text on the screen. My game screenshots were 640x480 which meant much of the text was only 7px tall.  It was still very readable for a human so I thought it would be no problem for the computer.  The building and research queue times were the most important game elements to OCR to progress in the game beyond the first few city hall levels.  Here's what those look like:
 
 ![Builder time remaining](/assets/images/1.png)
 
-Looks pretty easy, right?  As humans, we can glance at this and immediately see that one of hte builders will be done in a minute-and-a-half and the other will be done in 9 minutes.  The human playing the game then knows when to queue the next operation, or whether to use speedups to accelerate.  I needed my python code to discover this.  
+It looks pretty easy, right? As humans, we can glance at this and immediately see that one of the builders will be done in a minute and a half and the other will be done in 9 minutes. The human playing the game then knows when to queue the next operation or whether to use speedups to accelerate. I needed my Python code to discover this.
 
 Roboflow did its job perfectly giving me the coordinates and dimensions of those screen regions to prepare for OCR:
 
@@ -162,7 +162,7 @@ and
          "x" : 308,
          "y" : 167
          
-Throughout this project, Roboflow consistently delivered these high-confidence detections despite varying lighting conditions and UI states - something I've found remarkable for a model trained on relatively few images.
+Throughout this project, Roboflow consistently delivered high-confidence detections despite varying lighting conditions and UI states—remarkable for a model trained on relatively few images.
 
 I used python to crop those regions of the screen into new images.  Both still very readable for us humans:
 
@@ -200,13 +200,13 @@ def preprocess_image(image, debug_name=None):
     return enhanced
 ```
 
-I also tried creating 00.png, 01.png, 02.png, ..., 58.png, 59.png and attempted to match both digits to give matching more pixels.  The two digit template image sizes were  11px wide 7px high so precision in input images was still important.
+I also tried creating 00.png, 01.png, 02.png, ..., 58.png, and 59.png and attempted to match both digits to give matching more pixels. The two-digit template image sizes were  11px wide and 7px high, so precision in input images was still important.
 
 ![Cropped two digit numbers](/assets/images/4.png)
 
-The input images from the game were always a tiny bit different than my templates despite me taking the templates straight from the game.  One pixel off here, one pixel wider this time.  Template matching worked fine when my input image was cropped perfectly the same as the template -- and it was fast! -- but if the input was a tiny bit off, matching failed.  Another dead end.
+The input images from the game were always a tiny bit different from my templates despite me taking the templates straight from the game.  One pixel off here, one pixel wider this time.  Template matching worked fine when my input image was cropped perfectly the same as the template -- and it was fast! -- but if the input was a tiny bit off, matching failed.  Another dead end.
 
-Claude next suggested building a small custom PyTorch CNN model for OCR.  The rest of this article describes that deep learning journey to create an OCR model for reading tiny in-game timers - a challenge that pushed me to explore data collection strategies, model architecture decisions, and the critical importance of high-quality traing data.
+Claude next suggested building a small custom PyTorch CNN model for OCR.  The rest of this article describes that deep learning journey to create an OCR model for reading tiny in-game timers - a challenge that pushed me to explore data collection strategies, model architecture decisions, and the critical importance of high-quality training data.
 
 ## Data Labeling: The Automation Paradox
 
@@ -274,7 +274,7 @@ However, Claude wouldn't let me upload all 1408 images I had...
 
 ![Claude response](/assets/images/6.png)
 
-But I found a way to trick Claude!  It wouldn't let me upload 1408 individual images but Claude would evaluate pages and pages of PDFs with images embedded in them.  
+But I found a way to trick Claude! Although it wouldn't let me upload 1408 individual images, Claude would evaluate pages and pages of PDFs with images embedded in them.
 
 I built the images into a PDF with this script:
 
@@ -595,7 +595,7 @@ Overall Time Accuracy: 0.1549
 
 ![Prediction accuracy](/assets/images/11.png)
 
-The pattern was striking - perfect recognition of hours digits, decent performance on minutes, but terrible results for seconds digits. Very few times were predicted accurately.  This wasn't just a model architecture issue, but a fundamental data problem.
+The pattern was striking: Perfect recognition of hour digits, decent performance on minutes, and terrible results for second digits. Very few times were predicted accurately. This wasn't just a model architecture issue but a fundamental data problem.
 
 ### Analyzing the Data Imbalance
 
@@ -663,11 +663,11 @@ Overall Time Accuracy: 0.7571
 
 *Accuracy by digit position across different dataset sizes*
 
-The most important takeaway wasn't about the model architecture, but rather the critical importance of data: its quantity, quality, and distribution. This was proven conclusively when expanding the dataset pushed complete time accuracy from 30% to over 75% - a massive improvement that validates the data-first approach.
+The most important takeaway wasn't the model architecture but the critical importance of data: its quantity, quality, and distribution. Expanding the dataset proved this conclusively, increasing complete-time accuracy from 30% to over 75%—a massive improvement that validates the data-first approach.
 
 ## The Plot Twist: Tesseract Actually Works!
 
-After spending a coupld days building a custom CNN architecture and training it on over 1,300 images, I made a surprising discovery. Running the same cropped timer images through Tesseract OCR with the right configuration actually works remarkably well:
+After spending a couple days building a custom CNN architecture and training it on over 1,300 images, I made a surprising discovery. Running the same cropped timer images through Tesseract OCR with the right configuration actually works remarkably well:
 
 ```
 % python test_tesserect.py 2.png
@@ -703,7 +703,7 @@ Config '--psm 6': '‘Time Remaining: 00:01:37'
 Config '--psm 3': '‘Time Remaining: 00:01:37'
 ```
 
-This is a classic engineering lesson - sometimes we dive into complex solutions before fully exploring the capabilities of existing tools. The key was finding the right Tesseract configuration.  The custom CNN journey was super interesting and valuable for learning, but if somethign like this needed to be deployed to product, Tesseract would be plenty sufficient - no need for a custom CNN for this problem.  This demonstrates an important principle: always benchmark against existing solutions before building custom ones!
+This is a classic engineering lesson: Sometimes, we dive into complex solutions before fully exploring the capabilities of existing tools. The key was finding the right Tesseract configuration. The custom CNN journey was super interesting and valuable for learning, but if something like this needed to be deployed to a product, Tesseract would be plenty sufficient—there would be no need for a custom CNN for this problem. This demonstrates an important principle: always benchmark against existing solutions before building custom ones!
 
 ## Integration and Real-World Results
 
@@ -754,7 +754,7 @@ class TimeOCR:
 
 I should re-address again the elephant in the room initially mentioned earlier: Is game automation cheating?
 
-Yes, if you gain an advantage in a multi-player game via scripting or automation, most players (myself included) would consider that cheating.  Lilith (ROK developer) has stated that Bluestacks to run multiple accounts is allowed.  Bluestacks macros when used sporadically for convenience is also probably ok.  However, anyone building full game automation that does not require human interview will probably first get a warning, then a one-day game suspension, then a permanent ban.  This was a fun project for me to learn about Roboflow and play around with computer vision and PyTorch but this is not suitable for real-world use!
+Yes, if you gain an advantage in a multiplayer game via scripting or automation, most players (myself included) would consider that cheating.  Lilith (ROK developer) has stated that Bluestacks to run multiple accounts is allowed.  Bluestacks macros, when used sporadically for convenience, are also probably ok.  However, anyone building full game automation that does not require human intervention will probably get a warning, then a one-day game suspension, and then a permanent ban.  This was a fun project for me to learn about Roboflow and play around with computer vision and PyTorch but this is not suitable for real-world use!
 
 ## Learning Computer Vision Through Gaming
 
@@ -795,7 +795,7 @@ Future improvements planned include:
 
 ## The Roboflow Factor
 
-While this article focused heavily on the OCR challenge, I can't overstate how critical Roboflow was to the overall success of this project. Its ability to handle the object detection piece so effectively - with minimal training data and consistent 90%+ confidence in production - allowed me to focus on the more specialized OCR problem. For anyone tackling computer vision projects, I'd recommend starting with Roboflow to handle the heavy lifting of object detection, allowing you to focus your custom development efforts only where specialized needs arise.
+While this article focused heavily on the OCR challenge, I can't overstate how critical Roboflow was to the overall success of this project. Its ability to handle the object detection piece so effectively—with minimal training data and consistent 90%+ confidence in production—allowed me to focus on the more specialized OCR problem. For anyone tackling computer vision projects, I'd recommend starting with Roboflow to handle the heavy lifting of object detection. This will allow you to focus your custom development efforts only where specialized needs arise.
 
 ## Try It Yourself
 
@@ -809,11 +809,11 @@ Even if you don't play Rise of Kingdoms, the techniques here can be applied to a
 
 ## Conclusion: AI Building AI
 
-Perhaps the most meta aspect of this project was using one AI system (Claude) to help build another AI system (the custom CNN). This represents a fascinating direction where AI assists in its own development - a trend that will likely accelerate as both foundation models and specialized AI systems continue to improve.
+Perhaps the most meta aspect of this project was using one AI system (Claude) to help build another AI system (the custom CNN). This represents a fascinating direction in which AI assists in its own development—a trend that will likely accelerate as both foundation models and specialized AI systems continue to improve.
 
-If you're interested in game automation, computer vision, or practical applications of deep learning, I hope this project provides inspiration and practical guidance. The complete source code and documentation are available for you to adapt and extend.
+If you're interested in game automation, computer vision, or practical applications of deep learning, I hope this project inspires and provides practical guidance. The complete source code and documentation are available for you to adapt and extend.
 
-What started as a simple automation script evolved into a comprehensive system integrating multiple AI components - all driven by the recursive challenge of needing automation to build better automation. It's a journey that mirrors the broader evolution of AI systems, where each generation of tools enables more sophisticated applications.
+What started as a simple automation script evolved into a comprehensive system integrating multiple AI components. This evolution was driven by the recursive challenge of needing automation to build better automation. It's a journey that mirrors the broader evolution of AI systems, where each generation of tools enables more sophisticated applications.
 
 ---
 
