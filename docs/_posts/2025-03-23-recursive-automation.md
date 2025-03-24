@@ -749,6 +749,7 @@ class TimeOCR:
             
         # Resize to expected dimensions
         image = cv2.
+```
 
 ## Ethical Considerations
 
