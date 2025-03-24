@@ -391,9 +391,11 @@ if __name__ == "__main__":
 ````
 
 This generated an 88 page PDF with 16 images on each page:
+
 <img src="/assets/images/7.png" alt="image PDF" style="border: 2px solid #0066cc; border-radius: 4px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" />
 
 I started a new conversation with Claude uploading and uploaded 29 pages of the PDF a few per message before I exhausted my Claude quota. But I got the labels in JSON format!
+
 <img src="/assets/images/8.png" alt="Claude response" style="border: 2px solid #0066cc; border-radius: 4px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" />
   
 ## The Specialized CNN Architecture
