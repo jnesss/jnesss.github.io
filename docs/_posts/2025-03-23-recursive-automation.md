@@ -9,7 +9,7 @@ author: Jonathan Ness
  
 ## The Bootstrap Paradox of Game Automation
 
-I discovered Roboflow a couple weeks ago and was so impressed by how it transformed computer vision from a laborious process into something accessible and powerful. I worked with it for a few days and built a fun prototype that automates the mobile game Rise of Kingdoms using Roboflow's object detection capabilities.
+I discovered Roboflow a couple weeks ago and was so impressed by how it transformed computer vision from a laborious process into something accessible, powerful, and fun. I worked with it for a few days and built a fun prototype that automates the mobile game Rise of Kingdoms using Roboflow's object detection capabilities.
 
 The initial automation worked perfectly for detecting game UI elements, but I quickly hit a fascinating challenge: to make the automation truly useful, I needed to read tiny text displays showing countdown timers in the game. This created a perfect bootstrap paradox - I needed automation to collect and label thousands of timer screenshots, but I needed those labeled screenshots to build the automation in the first place.
 
