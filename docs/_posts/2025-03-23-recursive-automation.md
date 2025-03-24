@@ -15,7 +15,7 @@ This post details my journey solving this recursive problem through a combinatio
 
 > Note: Automating multi-player online games likely violates terms of service and will probably get your account banned if you try this. This project is purely for educational purposes.
 
-## Quick Results
+## TL;DR
 
 - **Built complete game automation system in 7 days** using Roboflow for object detection
 - **Trained custom OCR model with 95.48% digit accuracy** for reading tiny game timers
