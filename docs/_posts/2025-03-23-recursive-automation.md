@@ -27,9 +27,9 @@ This post details my journey solving this recursive problem through a combinatio
 The automation system combines several technologies:
 
 - **Roboflow** for object detection and UI element recognition - its API integration was by far the easiest part of this project
-- Bluestacks ADB for capturing screenshots and clicking at screen positions in the game
-- PyTorch for the custom OCR model
-- Claude for AI-assisted data annotation
+- **Bluestacks ADB** for capturing screenshots and clicking at screen positions in the game
+- **PyTorch** for the custom OCR model
+- **Claude** for AI-assisted data annotation
 
 I used Bluestacks ADB to take one screenshot of the game every second, sent the screenshot to Roboflow for inference, and then clicked the detected regions to automate the  tedious ROK tutorial. The complete Python code for this project is available at [github.com/jnesss/roborok](https://github.com/jnesss/roborok).
 
